@@ -1,5 +1,6 @@
+#define _USE_MATH_DEFINES
 #include <iostream>
-#include <math.h>
+#include <cmath>
 
 class Fraction
 {
@@ -76,6 +77,14 @@ constexpr Fraction operator/(Fraction lhs, const Fraction &rhs){
 constexpr double to_double(const Fraction &f){
     return double(f.num()) / f.den();
 }
+constexpr Fraction to_fraction(double d){
+    int64_t num = int64_t(d * 1000000000);
+    int64_t den = 1000000000;
+    return Fraction(num, den);
+}
+constexpr Fraction flip(const Fraction &f){
+    return Fraction(f.den(), f.num());
+}
 int main()
 {
     Fraction sum = Fraction(0);
@@ -88,18 +97,36 @@ int main()
     Fraction sum2 = Fraction(0);
     for (int64_t i = 1; i <= 20; ++i)
     {
-        sum2 += Fraction(-1, i) * Fraction(1, i);
+        sum2 += Fraction(pow(-1, i+1), i);
     }
     std::cout << sum2 << '\n';
     std::cout << to_double(sum2) << '\n';
-
     Fraction sum3 = Fraction(0);
     for (int64_t i = 1; i <= 15; ++i)
     {
-        sum3 += Fraction(1, (1 << i) * i);
+        sum3 += Fraction(1, pow(2, i)*i);
     }
     std::cout << sum3 << '\n';
     std::cout << to_double(sum3) << '\n';
+    double x = (sqrt(5)+1)/2;
+    for(int i = 0; i < 20; i++){
+        double y = floor(x);
+        double z = x-y;
+        Fraction a = to_fraction(z);
+        Fraction b = flip(a);
+        std::cout << y << ' ';
+        x = to_double(b);
+    }
+    std::cout << std::endl;
+    x = M_E;
+    for(int i = 0; i < 20; i++){
+        double y = floor(x);
+        double z = x-y;
+        Fraction a = to_fraction(z);
+        Fraction b = flip(a);
+        std::cout << y << ' ';
+        x = to_double(b);
+    }
 
 
 }
