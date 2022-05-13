@@ -77,10 +77,17 @@ constexpr Fraction operator/(Fraction lhs, const Fraction &rhs){
 constexpr double to_double(const Fraction &f){
     return double(f.num()) / f.den();
 }
-constexpr Fraction to_fraction(double d){
-    int64_t num = int64_t(d * 1000000000);
-    int64_t den = 1000000000;
-    return Fraction(num, den);
+constexpr Fraction to_fraction(double number){
+    //multiply number by 10 until it is whole number
+    int counter = 0;
+    while(number != std::floor(number)){
+        number *= 10;
+        counter++;
+    }
+    //convert to fraction
+    int64_t n = std::floor(number);
+    int64_t d = std::pow(10, counter);
+    return Fraction(n, d);
 }
 constexpr Fraction flip(const Fraction &f){
     return Fraction(f.den(), f.num());
@@ -108,25 +115,26 @@ int main()
     }
     std::cout << sum3 << '\n';
     std::cout << to_double(sum3) << '\n';
-    double x = (sqrt(5)+1)/2;
-    for(int i = 0; i < 20; i++){
-        double y = floor(x);
-        double z = x-y;
-        Fraction a = to_fraction(z);
-        Fraction b = flip(a);
-        std::cout << y << ' ';
-        x = to_double(b);
-    }
-    std::cout << std::endl;
-    x = M_E;
-    for(int i = 0; i < 20; i++){
-        double y = floor(x);
-        double z = x-y;
-        Fraction a = to_fraction(z);
-        Fraction b = flip(a);
-        std::cout << y << ' ';
-        x = to_double(b);
-    }
+    std::cout << to_fraction(4.78) << '\n';
+    // double x = (sqrt(5)+1)/2;
+    // for(int i = 0; i < 20; i++){
+    //     double y = floor(x);
+    //     double z = x-y;
+    //     Fraction a = to_fraction(z);
+    //     Fraction b = flip(a);
+    //     std::cout << y << ' ';
+    //     x = to_double(b);
+    // }
+    // std::cout << std::endl;
+    // x = M_E;
+    // for(int i = 0; i < 20; i++){
+    //     double y = floor(x);
+    //     double z = x-y;
+    //     Fraction a = to_fraction(z);
+    //     Fraction b = flip(a);
+    //     std::cout << y << ' ';
+    //     x = to_double(b);
+    // }
 
 
 }
