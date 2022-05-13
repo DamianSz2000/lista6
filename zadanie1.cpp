@@ -17,6 +17,30 @@ public:
         n = new_n;
         return *this;
     }
+    constexpr Fraction &operator+=(const Fraction &rhs)
+    {
+        int64_t new_n = n * rhs.d + d * rhs.n;
+        int64_t new_d = d * rhs.d;
+        n = new_n / gcd(new_n, new_d);
+        d = new_d / gcd(new_n, new_d);
+        return *this;
+    }
+    constexpr Fraction &operator-=(const Fraction &rhs)
+    {
+        int64_t new_n = n * rhs.d - d * rhs.n;
+        int64_t new_d = d * rhs.d;
+        n = new_n / gcd(new_n, new_d);
+        d = new_d / gcd(new_n, new_d);
+        return *this;
+    }
+    constexpr Fraction &operator/=(const Fraction &rhs)
+    {
+        int64_t new_n = n * rhs.d;
+        int64_t new_d = d * rhs.n;
+        n = new_n / gcd(new_n, new_d);
+        d = new_d / gcd(new_n, new_d);
+        return *this;
+    }
 };
 std::ostream &operator<<(std::ostream &out, const Fraction &f)
 {
@@ -34,96 +58,48 @@ constexpr Fraction operator*(Fraction lhs, const Fraction &rhs)
 {
     return lhs *= rhs;
 }
-constexpr Fraction operator+(Fraction lhs, const Fraction &rhs)
-{
+constexpr Fraction operator+(Fraction lhs, const Fraction &rhs){
     int64_t new_n = lhs.num() * rhs.den() + lhs.den() * rhs.num();
     int64_t new_d = lhs.den() * rhs.den();
     return Fraction(new_n, new_d);
 }
-constexpr Fraction operator+=(Fraction lhs, const Fraction &rhs)
-{
-    int64_t new_n = lhs.num() * rhs.den() + lhs.den() * rhs.num();
-    int64_t new_d = lhs.den() * rhs.den();
-    return Fraction(new_n, new_d);
-}
-constexpr Fraction operator-(Fraction lhs, const Fraction &rhs)
-{
+constexpr Fraction operator-(Fraction lhs, const Fraction &rhs){
     int64_t new_n = lhs.num() * rhs.den() - lhs.den() * rhs.num();
     int64_t new_d = lhs.den() * rhs.den();
     return Fraction(new_n, new_d);
 }
-constexpr Fraction operator-=(Fraction lhs, const Fraction &rhs)
-{
-    int64_t new_n = lhs.num() * rhs.den() - lhs.den() * rhs.num();
-    int64_t new_d = lhs.den() * rhs.den();
-    return Fraction(new_n, new_d);
-}
-constexpr Fraction operator/(Fraction lhs, const Fraction &rhs)
-{
+constexpr Fraction operator/(Fraction lhs, const Fraction &rhs){
     int64_t new_n = lhs.num() * rhs.den();
     int64_t new_d = lhs.den() * rhs.num();
     return Fraction(new_n, new_d);
 }
-constexpr Fraction operator/=(Fraction lhs, const Fraction &rhs)
-{
-    int64_t new_n = lhs.num() * rhs.den();
-    int64_t new_d = lhs.den() * rhs.num();
-    return Fraction(new_n, new_d);
-}
-
-constexpr double to_double(const Fraction &f)
-{
+constexpr double to_double(const Fraction &f){
     return double(f.num()) / f.den();
 }
 int main()
 {
-    int N = 100;
-    double sum = 0;
-    Fraction sum1(0);
-    double fract = 0;
-    for (int i = 1; i <= 100; i++)
+    Fraction sum = Fraction(0);
+    for (int64_t i = 1; i <= 100; ++i)
     {
-        Fraction f1(1, (i * (i + 1)));
-        fract = to_double(f1);
-        sum += fract;
-        sum1 = sum1+f1;
-        std::cout << i << " " << sum1 << "   " << to_double(sum1) << std::endl;
+        sum += Fraction(1, i * (i + 1));
     }
-    std::cout << "suma a): " << sum << std::endl;
-    N = 20;
-    sum = 0;
-    fract = 0;
-    sum1 = 0;
-    for (int i = 1; i <= 20; i++)
+    std::cout << sum << '\n';
+    std::cout << to_double(sum) << '\n';
+    Fraction sum2 = Fraction(0);
+    for (int64_t i = 1; i <= 20; ++i)
     {
-        Fraction f1(pow((-1),i+1),i);
-        fract = to_double(f1);
-        sum += fract;
-        sum1 = sum1+f1;
-        std::cout << i << " " << sum1 << "   " << to_double(sum1) << std::endl;
+        sum2 += Fraction(-1, i) * Fraction(1, i);
     }
-    std::cout << "suma b): " << sum << std::endl;
-    N = 15;
-    sum = 0;
-    fract = 0;
-    sum1 = 0;
-    for (int i = 1; i <= 15; i++)
+    std::cout << sum2 << '\n';
+    std::cout << to_double(sum2) << '\n';
+
+    Fraction sum3 = Fraction(0);
+    for (int64_t i = 1; i <= 15; ++i)
     {
-        Fraction f1(1,pow(2,1)*i);
-        fract = to_double(f1);
-        sum += fract;
-        sum1 = sum1+f1;
-        std::cout << i << " " << sum1 << "   " << to_double(sum1) << std::endl;
+        sum3 += Fraction(1, (1 << i) * i);
     }
-    std::cout << "suma c): " << sum << std::endl;
-    double ulamek = (sqrt(5)+1)/2;
-    for(int i = 0; i < 1; i++){
-        int ulamek2 = floor(ulamek);
-        double ulamek3 = ulamek - ulamek2;
-        std::cout << ulamek3;
-        double ulamek4 = 2/ulamek3;
-        std::cout << ulamek2 << " ";
-        ulamek = ulamek4;
-    }
+    std::cout << sum3 << '\n';
+    std::cout << to_double(sum3) << '\n';
+
 
 }
