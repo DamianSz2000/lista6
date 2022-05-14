@@ -78,15 +78,14 @@ constexpr double to_double(const Fraction &f){
     return double(f.num()) / f.den();
 }
 constexpr Fraction to_fraction(double number){
-    //multiply number by 10 until it is whole number
-    int counter = 0;
-    while(number != std::floor(number)){
+    //convert double to fraction
+    int64_t n = number;
+    int64_t d = 1;
+    while(number - n != 0){
         number *= 10;
-        counter++;
+        d *= 10;
+        n = number;
     }
-    //convert to fraction
-    int64_t n = std::floor(number);
-    int64_t d = std::pow(10, counter);
     return Fraction(n, d);
 }
 constexpr Fraction flip(const Fraction &f){
@@ -98,43 +97,48 @@ int main()
     for (int64_t i = 1; i <= 100; ++i)
     {
         sum += Fraction(1, i * (i + 1));
+        std::cout << "i: " << i << ", " << sum << '\n';
     }
-    std::cout << sum << '\n';
-    std::cout << to_double(sum) << '\n';
+    std::cout << "Suma jako fraction: " << sum << '\n';
+    std::cout << "Suma jako double: " << to_double(sum) << '\n';
     Fraction sum2 = Fraction(0);
     for (int64_t i = 1; i <= 20; ++i)
     {
         sum2 += Fraction(pow(-1, i+1), i);
+        std::cout << "i: " << i << ", " << sum2 << '\n';
     }
-    std::cout << sum2 << '\n';
-    std::cout << to_double(sum2) << '\n';
+    std::cout << "Suma jako fraction: " << sum2 << '\n';
+    std::cout << "Suma jako double: " << to_double(sum2) << '\n';
     Fraction sum3 = Fraction(0);
     for (int64_t i = 1; i <= 15; ++i)
     {
         sum3 += Fraction(1, pow(2, i)*i);
+        std::cout << "i: " << i << ", " << sum3 << '\n';
     }
-    std::cout << sum3 << '\n';
-    std::cout << to_double(sum3) << '\n';
-    std::cout << to_fraction(4.78) << '\n';
-    // double x = (sqrt(5)+1)/2;
-    // for(int i = 0; i < 20; i++){
-    //     double y = floor(x);
-    //     double z = x-y;
-    //     Fraction a = to_fraction(z);
-    //     Fraction b = flip(a);
-    //     std::cout << y << ' ';
-    //     x = to_double(b);
-    // }
-    // std::cout << std::endl;
-    // x = M_E;
-    // for(int i = 0; i < 20; i++){
-    //     double y = floor(x);
-    //     double z = x-y;
-    //     Fraction a = to_fraction(z);
-    //     Fraction b = flip(a);
-    //     std::cout << y << ' ';
-    //     x = to_double(b);
-    // }
+    std::cout << "Suma jako fraction: " << sum3 << '\n';
+    std::cout << "Suma jako double: " << to_double(sum3) << '\n';
+    std::cout << '\n';
+    std::cout << "Ulamek lancuchowy x = (sqrt(5)+1)/2:" << '\n';
+    double x = (sqrt(5)+1)/2;
+    for(int i = 0; i < 20; i++){
+        double y = floor(x);
+        double z = x-y;
+        Fraction a = to_fraction(z);
+        Fraction b = flip(a);
+        std::cout << y << ' ';
+        x = to_double(b);
+    }
+    std::cout << std::endl;
+    std::cout << "Ulamek lancuchowy x=e:" << '\n';
+    x = M_E;
+    for(int i = 0; i < 20; i++){
+        double y = floor(x);
+        double z = x-y;
+        Fraction a = to_fraction(z);
+        Fraction b = flip(a);
+        std::cout << y << ' ';
+        x = to_double(b);
+    }
 
 
 }
